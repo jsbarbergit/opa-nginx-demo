@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  policy001.rego: "package opa.access.proxy\n\n\n# List of whitelisted websites -
+    needs externalising\nurl_whitelist := {\n  \"localhost/proxy/allowed\",\n  \"localhost/proxy\",\n}\n\n#
+    Set authz var values - clients should request this var for policy decision response
+    \nauthz[\"reason\"] = \"Authorised\" { allowed }\nauthz[\"reason\"] = sprintf(\"URL:
+    %v is not whitelisted\", [input[\"X-Original-Referer\"]]) { not allowed }\nauthz[\"code\"]
+    = 200 { allowed }\nauthz[\"code\"] = 403 { not allowed }\n\n\nallowed {\n  some
+    i\n    input[\"X-Original-Referer\"] == url_whitelist[i]\n}"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: opa-policies
+  namespace: opa

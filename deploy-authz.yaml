@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authz
+  namespace: opa
+  labels:
+    app: authz
+    SupportGroup: WP-DTS-Hydra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authz
+  template:
+    metadata:
+      labels:
+        app: authz
+        SupportGroup: WP-DTS-Hydra
+      name: authz
+    spec:
+      containers:
+      - name: authz
+        image: jsb/auth-proxy:0.6.1
+        imagePullPolicy: Never
+        ports:
+        - name: authz-proxy
+          containerPort: 8181
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
