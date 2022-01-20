@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: authz
+  name: authz
+  namespace: opa
+spec:
+  ports:
+  - name: authz-proxy
+    port: 8181
+    protocol: TCP
+    targetPort: 8181
+  selector:
+    app: authz
+    SupportGroup: WP-DTS-Hydra
+  type: ClusterIP
+status:
+  loadBalancer: {}
